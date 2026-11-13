@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><title>问卷填写 - 利安花园业主表决平台</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100%;min-height:100%;margin:0;padding:0;}body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "inverse-surface": "#213145", "on-primary-fixed-variant": "#173bab", "tertiary": "#002e81", "outline-variant": "#c4c5d5", "on-secondary": "#ffffff", "on-secondary-fixed-variant": "#005137", "on-tertiary-fixed-variant": "#003ea8", "secondary": "#006c4a", "on-secondary-container": "#00714e", "on-tertiary-container": "#a4b9ff", "on-tertiary": "#ffffff", "secondary-fixed-dim": "#68dba9", "primary-fixed": "#dde1ff", "on-primary-container": "#a8b8ff", "secondary-fixed": "#85f8c4", "tertiary-container": "#0042b2", "on-primary-fixed": "#001453", "error-container": "#ffdad6", "surface-variant": "#d3e4fe", "surface-container-lowest": "#ffffff", "tertiary-fixed": "#dbe1ff", "on-surface-variant": "#444653", "on-error": "#ffffff", "primary": "#00288e", "inverse-on-surface": "#eaf1ff", "surface-tint": "#3755c3", "on-secondary-fixed": "#002114", "background": "#f8f9ff", "inverse-primary": "#b8c4ff", "on-surface": "#0b1c30", "tertiary-fixed-dim": "#b4c5ff", "primary-fixed-dim": "#b8c4ff", "on-error-container": "#93000a", "surface-container": "#e5eeff", "on-tertiary-fixed": "#00174b", "surface-dim": "#cbdbf5", "secondary-container": "#82f5c1", "surface-bright": "#f8f9ff", "on-background": "#0b1c30", "error": "#ba1a1a", "surface-container-high": "#dce9ff", "surface-container-low": "#eff4ff", "surface-container-highest": "#d3e4fe", "on-primary": "#ffffff", "primary-container": "#1e40af", "outline": "#757684", "surface": "#f8f9ff" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "margin": "1rem", "space-sm": "0.5rem", "space-xl": "1.5rem", "margin-sm": "0.75rem", "space-lg": "1rem", "gutter-sm": "0.75rem", "space-md": "0.75rem", "gutter": "1rem", "space-xs": "0.25rem" }, fontFamily: { "headline-lg-mobile": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"] }, fontSize: { "headline-lg-mobile": ["22px", { "lineHeight": "30px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }], "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }], "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }], "label-lg": ["15px", { "lineHeight": "20px", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }], "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }], "label-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface antialiased min-h-screen flex flex-col selection:bg-surface-variant"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-xl bg-surface-container-high flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]">verified</span></div><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-none">问卷填写</span><span class="px-1.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed text-[10px] font-semibold leading-tight tracking-wider uppercase">业委会认证</span></div><span class="font-label-sm text-label-sm text-on-surface-variant leading-tight mt-0.5">利安花园业主大会秘书处</span></div></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="flex-1 flex flex-col w-full pt-16 pb-24 bg-surface min-h-screen"><div class="flex flex-col w-full px-margin pb-12 space-y-space-lg">
+<!-- Top Notification & Title Banner -->
+<div class="rounded-xl p-space-lg bg-surface-container shadow-sm space-y-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[28px]" style="font-variation-settings: 'FILL' 1;">how_to_vote</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight">利安花园物业处置方案业主调查问卷</h1>
+</div>
+<div class="flex items-start gap-space-sm p-space-md rounded-lg bg-surface-variant text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0 mt-0.5">info</span>
+<p class="font-body-sm text-body-sm leading-relaxed">
+        本问卷为业主意见征集，用于业委会研判物业后续处置方向。问卷匿名，一户一票，请根据您的真实想法填写。
+      </p>
+</div>
+<!-- Verification / Metadata Card -->
+<div class="rounded-lg p-space-md bg-surface-container-lowest space-y-space-md">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant">小区名称</span>
+<span class="font-label-lg text-label-lg text-on-surface bg-surface-container px-2.5 py-1 rounded-full">利安花园</span>
+</div>
+<div class="space-y-space-xs">
+<label class="font-label-md text-label-md text-on-surface flex items-center gap-1" for="roomNumber">
+          房号 <span class="text-error font-bold">*</span>
+</label>
+<div class="relative">
+<input class="w-full h-12 px-space-md rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest transition-colors" id="roomNumber" placeholder="例如：1栋102室（仅用于核验一户一票，信息保密）" type="text"/>
+</div>
+</div>
+<div class="space-y-space-xs">
+<label class="font-label-md text-label-md text-on-surface" for="fillDate">填写日期</label>
+<input class="w-full h-12 px-space-md rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none" id="fillDate" type="date"/>
+</div>
+</div>
+</div>
+<!-- Part 1: Basic Intention -->
+<section class="rounded-xl p-space-lg bg-surface-container-lowest shadow-sm space-y-space-md">
+<div class="flex items-center gap-space-sm border-none">
+<span class="px-2 py-0.5 rounded bg-primary text-on-primary font-label-sm text-label-sm">第一部分</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">基础意向</h2>
+</div>
+<div class="space-y-space-sm">
+<p class="font-body-lg text-body-lg text-on-surface font-medium">
+        第1题：您更倾向以下哪一种物业处置方案？ <span class="text-error font-bold">*</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-normal">（单选）</span>
+</p>
+<!-- Option Cards -->
+<div class="space-y-space-sm pt-1" id="question1-options">
+<label class="choice-card flex items-center justify-between p-space-lg rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none transition-all">
+<span class="font-label-lg text-label-lg">方案A：继续聘用现有物业公司</span>
+<input class="hidden" name="main_plan" type="radio" value="planA"/>
+<span class="radio-indicator w-6 h-6 rounded-full flex items-center justify-center bg-surface-variant text-on-surface-variant">
+<span class="dot w-2.5 h-2.5 rounded-full bg-transparent"></span>
+</span>
+</label>
+<label class="choice-card flex items-center justify-between p-space-lg rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none transition-all">
+<span class="font-label-lg text-label-lg">方案B：更换新的物业公司</span>
+<input class="hidden" name="main_plan" type="radio" value="planB"/>
+<span class="radio-indicator w-6 h-6 rounded-full flex items-center justify-center bg-surface-variant text-on-surface-variant">
+<span class="dot w-2.5 h-2.5 rounded-full bg-transparent"></span>
+</span>
+</label>
+<label class="choice-card flex items-center justify-between p-space-lg rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none transition-all">
+<span class="font-label-lg text-label-lg">暂不表态，希望先了解更多信息</span>
+<input class="hidden" name="main_plan" type="radio" value="planC"/>
+<span class="radio-indicator w-6 h-6 rounded-full flex items-center justify-center bg-surface-variant text-on-surface-variant">
+<span class="dot w-2.5 h-2.5 rounded-full bg-transparent"></span>
+</span>
+</label>
+</div>
+<!-- Contextual Hint Banner -->
+<div class="flex items-center gap-space-sm p-space-md rounded-lg bg-surface-container text-on-surface-variant mt-2" id="plan-guide-banner">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0">alt_route</span>
+<span class="font-body-sm text-body-sm" id="guide-text">提示：选择方案A请填写第二组，选择方案B请填写第三组。</span>
+</div>
+</div>
+</section>
+<!-- Part 2: Plan A Section -->
+<section class="rounded-xl p-space-lg bg-surface-container-lowest shadow-sm space-y-space-lg transition-all duration-300" id="section-plan-a">
+<div class="flex items-start gap-space-sm">
+<span class="px-2 py-0.5 rounded bg-secondary text-on-secondary font-label-sm text-label-sm shrink-0 mt-0.5">第二部分</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface leading-snug">如您选择【方案A：续聘现有物业】，请填写本组问题</h2>
+</div>
+<!-- Question 2 -->
+<div class="space-y-space-sm">
+<p class="font-body-lg text-body-lg text-on-surface font-medium leading-relaxed">
+        第2题：是否同意：业委会收集业主服务诉求，与现物业协商达成协议后，给予物业1个月整改期，整改目标为业主满意度90%？
+      </p>
+<div class="grid grid-cols-3 gap-space-sm">
+<label class="choice-card flex flex-col items-center justify-center py-3 px-2 rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none">
+<input class="hidden" name="q2_agreement" type="radio" value="agree"/>
+<span class="font-label-lg text-label-lg">同意</span>
+</label>
+<label class="choice-card flex flex-col items-center justify-center py-3 px-2 rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none">
+<input class="hidden" name="q2_agreement" type="radio" value="disagree"/>
+<span class="font-label-lg text-label-lg">不同意</span>
+</label>
+<label class="choice-card flex flex-col items-center justify-center py-3 px-2 rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none">
+<input class="hidden" name="q2_agreement" type="radio" value="reserved"/>
+<span class="font-label-lg text-label-lg">保留意见</span>
+</label>
+</div>
+</div>
+<!-- Question 3 -->
+<div class="space-y-space-sm">
+<p class="font-body-lg text-body-lg text-on-surface font-medium leading-relaxed">
+        第3题：是否同意：物业整改验收达标后，欠费业主在整改结束后1个月内补齐物业欠费？
+      </p>
+<div class="grid grid-cols-3 gap-space-sm">
+<label class="choice-card flex flex-col items-center justify-center py-3 px-2 rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none">
+<input class="hidden" name="q3_agreement" type="radio" value="agree"/>
+<span class="font-label-lg text-label-lg">同意</span>
+</label>
+<label class="choice-card flex flex-col items-center justify-center py-3 px-2 rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none">
+<input class="hidden" name="q3_agreement" type="radio" value="disagree"/>
+<span class="font-label-lg text-label-lg">不同意</span>
+</label>
+<label class="choice-card flex flex-col items-center justify-center py-3 px-2 rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none">
+<input class="hidden" name="q3_agreement" type="radio" value="reserved"/>
+<span class="font-label-lg text-label-lg">保留意见</span>
+</label>
+</div>
+</div>
+<!-- Question 4 -->
+<div class="space-y-space-sm">
+<p class="font-body-lg text-body-lg text-on-surface font-medium">
+        第4题：您最希望物业公司优先整改哪些服务项目？ <span class="font-label-sm text-label-sm text-on-surface-variant font-normal">（可多选，可补充）</span>
+</p>
+<div class="grid grid-cols-1 gap-space-xs">
+<label class="checkbox-card flex items-center gap-space-md p-space-md rounded-xl bg-surface-container-low cursor-pointer">
+<input class="hidden" name="q4_priorities" type="checkbox" value="sanitation"/>
+<span class="check-box w-5 h-5 rounded bg-surface-container-highest flex items-center justify-center text-on-primary"></span>
+<span class="font-body-md text-body-md text-on-surface">小区环境卫生保洁</span>
+</label>
+<label class="checkbox-card flex items-center gap-space-md p-space-md rounded-xl bg-surface-container-low cursor-pointer">
+<input class="hidden" name="q4_priorities" type="checkbox" value="elevator"/>
+<span class="check-box w-5 h-5 rounded bg-surface-container-highest flex items-center justify-center text-on-primary"></span>
+<span class="font-body-md text-body-md text-on-surface">电梯维保、故障响应速度</span>
+</label>
+<label class="checkbox-card flex items-center gap-space-md p-space-md rounded-xl bg-surface-container-low cursor-pointer">
+<input class="hidden" name="q4_priorities" type="checkbox" value="facility"/>
+<span class="check-box w-5 h-5 rounded bg-surface-container-highest flex items-center justify-center text-on-primary"></span>
+<span class="font-body-md text-body-md text-on-surface">公共区域设施维修（路灯、门禁、消防、楼道等）</span>
+</label>
+<label class="checkbox-card flex items-center gap-space-md p-space-md rounded-xl bg-surface-container-low cursor-pointer">
+<input class="hidden" name="q4_priorities" type="checkbox" value="security"/>
+<span class="check-box w-5 h-5 rounded bg-surface-container-highest flex items-center justify-center text-on-primary"></span>
+<span class="font-body-md text-body-md text-on-surface">安保巡逻、外来人员及车辆管理</span>
+</label>
+<label class="checkbox-card flex items-center gap-space-md p-space-md rounded-xl bg-surface-container-low cursor-pointer">
+<input class="hidden" name="q4_priorities" type="checkbox" value="greening"/>
+<span class="check-box w-5 h-5 rounded bg-surface-container-highest flex items-center justify-center text-on-primary"></span>
+<span class="font-body-md text-body-md text-on-surface">绿化养护</span>
+</label>
+<label class="checkbox-card flex items-center gap-space-md p-space-md rounded-xl bg-surface-container-low cursor-pointer">
+<input class="hidden" name="q4_priorities" type="checkbox" value="parking"/>
+<span class="check-box w-5 h-5 rounded bg-surface-container-highest flex items-center justify-center text-on-primary"></span>
+<span class="font-body-md text-body-md text-on-surface">停车秩序管理</span>
+</label>
+<label class="checkbox-card flex items-center gap-space-md p-space-md rounded-xl bg-surface-container-low cursor-pointer">
+<input class="hidden" name="q4_priorities" type="checkbox" value="complaints"/>
+<span class="check-box w-5 h-5 rounded bg-surface-container-highest flex items-center justify-center text-on-primary"></span>
+<span class="font-body-md text-body-md text-on-surface">投诉响应、问题跟进反馈</span>
+</label>
+</div>
+<div class="pt-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant">其他补充：</label>
+<input class="w-full h-11 mt-1 px-space-md rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline focus:outline-none" placeholder="请输入其他希望整改的事项..." type="text"/>
+</div>
+</div>
+<!-- Question 5 -->
+<div class="space-y-space-sm">
+<label class="font-body-lg text-body-lg text-on-surface font-medium block" for="q5_feedback">
+        第5题：您对现有物业还有其他意见或诉求：
+      </label>
+<textarea class="w-full p-space-md rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline focus:outline-none" id="q5_feedback" placeholder="请输入您的宝贵意见..." rows="3"></textarea>
+</div>
+</section>
+<!-- Part 3: Plan B Section -->
+<section class="rounded-xl p-space-lg bg-surface-container-lowest shadow-sm space-y-space-lg transition-all duration-300" id="section-plan-b">
+<div class="flex items-start gap-space-sm">
+<span class="px-2 py-0.5 rounded bg-tertiary-container text-on-primary font-label-sm text-label-sm shrink-0 mt-0.5">第三部分</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface leading-snug">如您选择【方案B：更换新物业】，请填写本组问题</h2>
+</div>
+<!-- Question 6 -->
+<div class="space-y-space-sm">
+<p class="font-body-lg text-body-lg text-on-surface font-medium leading-relaxed">
+        第6题：是否同意：业委会核算小区现有物业费总收入，根据资金预算寻找匹配的新物业公司，并明确服务内容？
+      </p>
+<div class="grid grid-cols-3 gap-space-sm">
+<label class="choice-card flex flex-col items-center justify-center py-3 px-2 rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none">
+<input class="hidden" name="q6_agreement" type="radio" value="agree"/>
+<span class="font-label-lg text-label-lg">同意</span>
+</label>
+<label class="choice-card flex flex-col items-center justify-center py-3 px-2 rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none">
+<input class="hidden" name="q6_agreement" type="radio" value="disagree"/>
+<span class="font-label-lg text-label-lg">不同意</span>
+</label>
+<label class="choice-card flex flex-col items-center justify-center py-3 px-2 rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none">
+<input class="hidden" name="q6_agreement" type="radio" value="reserved"/>
+<span class="font-label-lg text-label-lg">保留意见</span>
+</label>
+</div>
+</div>
+<!-- Question 7 -->
+<div class="space-y-space-sm">
+<p class="font-body-lg text-body-lg text-on-surface font-medium leading-relaxed">
+        第7题：如果现有物业费收入不足以覆盖预期物业服务，您是否接受适度调整物业费、停车费标准？
+      </p>
+<div class="space-y-space-xs">
+<label class="choice-card flex items-center justify-between p-space-md rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none">
+<span class="font-body-md text-body-md">可以接受上调，愿意参考市场合理标准</span>
+<input class="hidden" name="q7_fee_adjust" type="radio" value="accept"/>
+<span class="radio-indicator w-5 h-5 rounded-full flex items-center justify-center bg-surface-variant">
+<span class="dot w-2 h-2 rounded-full bg-transparent"></span>
+</span>
+</label>
+<label class="choice-card flex items-center justify-between p-space-md rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none">
+<span class="font-body-md text-body-md">不接受上调，只能在现有费用水平寻找物业</span>
+<input class="hidden" name="q7_fee_adjust" type="radio" value="reject"/>
+<span class="radio-indicator w-5 h-5 rounded-full flex items-center justify-center bg-surface-variant">
+<span class="dot w-2 h-2 rounded-full bg-transparent"></span>
+</span>
+</label>
+<label class="choice-card flex items-center justify-between p-space-md rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none">
+<span class="font-body-md text-body-md">暂不确定，要看上调幅度与对应的服务内容</span>
+<input class="hidden" name="q7_fee_adjust" type="radio" value="uncertain"/>
+<span class="radio-indicator w-5 h-5 rounded-full flex items-center justify-center bg-surface-variant">
+<span class="dot w-2 h-2 rounded-full bg-transparent"></span>
+</span>
+</label>
+</div>
+</div>
+<!-- Question 8 -->
+<div class="space-y-space-sm">
+<p class="font-body-lg text-body-lg text-on-surface font-medium leading-relaxed">
+        第8题：是否同意：利用小区公共区域引进广告，增加小区公共收益，补贴物业运营开支？
+      </p>
+<div class="grid grid-cols-3 gap-space-sm">
+<label class="choice-card flex flex-col items-center justify-center py-3 px-2 rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none">
+<input class="hidden" name="q8_ads" type="radio" value="agree"/>
+<span class="font-label-lg text-label-lg">同意</span>
+</label>
+<label class="choice-card flex flex-col items-center justify-center py-3 px-2 rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none">
+<input class="hidden" name="q8_ads" type="radio" value="disagree"/>
+<span class="font-label-lg text-label-lg">不同意</span>
+</label>
+<label class="choice-card flex flex-col items-center justify-center py-3 px-2 rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none">
+<input class="hidden" name="q8_ads" type="radio" value="reserved"/>
+<span class="font-label-lg text-label-lg">保留意见</span>
+</label>
+</div>
+</div>
+<!-- Question 9 -->
+<div class="space-y-space-sm">
+<p class="font-body-lg text-body-lg text-on-surface font-medium">
+        第9题：更换物业后，您最看重哪些物业服务？ <span class="font-label-sm text-label-sm text-on-surface-variant font-normal">（可多选，可补充）</span>
+</p>
+<div class="grid grid-cols-1 gap-space-xs">
+<label class="checkbox-card flex items-center gap-space-md p-space-md rounded-xl bg-surface-container-low cursor-pointer">
+<input class="hidden" name="q9_priorities" type="checkbox" value="sanitation"/>
+<span class="check-box w-5 h-5 rounded bg-surface-container-highest flex items-center justify-center text-on-primary"></span>
+<span class="font-body-md text-body-md text-on-surface">小区环境卫生保洁</span>
+</label>
+<label class="checkbox-card flex items-center gap-space-md p-space-md rounded-xl bg-surface-container-low cursor-pointer">
+<input class="hidden" name="q9_priorities" type="checkbox" value="elevator"/>
+<span class="check-box w-5 h-5 rounded bg-surface-container-highest flex items-center justify-center text-on-primary"></span>
+<span class="font-body-md text-body-md text-on-surface">电梯维保、故障响应速度</span>
+</label>
+<label class="checkbox-card flex items-center gap-space-md p-space-md rounded-xl bg-surface-container-low cursor-pointer">
+<input class="hidden" name="q9_priorities" type="checkbox" value="facility"/>
+<span class="check-box w-5 h-5 rounded bg-surface-container-highest flex items-center justify-center text-on-primary"></span>
+<span class="font-body-md text-body-md text-on-surface">公共区域设施维修（路灯、门禁、消防、楼道等）</span>
+</label>
+<label class="checkbox-card flex items-center gap-space-md p-space-md rounded-xl bg-surface-container-low cursor-pointer">
+<input class="hidden" name="q9_priorities" type="checkbox" value="security"/>
+<span class="check-box w-5 h-5 rounded bg-surface-container-highest flex items-center justify-center text-on-primary"></span>
+<span class="font-body-md text-body-md text-on-surface">安保巡逻、外来人员及车辆管理</span>
+</label>
+<label class="checkbox-card flex items-center gap-space-md p-space-md rounded-xl bg-surface-container-low cursor-pointer">
+<input class="hidden" name="q9_priorities" type="checkbox" value="greening"/>
+<span class="check-box w-5 h-5 rounded bg-surface-container-highest flex items-center justify-center text-on-primary"></span>
+<span class="font-body-md text-body-md text-on-surface">绿化养护</span>
+</label>
+<label class="checkbox-card flex items-center gap-space-md p-space-md rounded-xl bg-surface-container-low cursor-pointer">
+<input class="hidden" name="q9_priorities" type="checkbox" value="parking"/>
+<span class="check-box w-5 h-5 rounded bg-surface-container-highest flex items-center justify-center text-on-primary"></span>
+<span class="font-body-md text-body-md text-on-surface">停车秩序管理</span>
+</label>
+<label class="checkbox-card flex items-center gap-space-md p-space-md rounded-xl bg-surface-container-low cursor-pointer">
+<input class="hidden" name="q9_priorities" type="checkbox" value="complaints"/>
+<span class="check-box w-5 h-5 rounded bg-surface-container-highest flex items-center justify-center text-on-primary"></span>
+<span class="font-body-md text-body-md text-on-surface">投诉响应、问题跟进反馈</span>
+</label>
+</div>
+<div class="pt-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant">其他补充：</label>
+<input class="w-full h-11 mt-1 px-space-md rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline focus:outline-none" placeholder="请输入其他您看重的服务..." type="text"/>
+</div>
+</div>
+<!-- Question 10 -->
+<div class="space-y-space-sm">
+<label class="font-body-lg text-body-lg text-on-surface font-medium block" for="q10_feedback">
+        第10题：您对选聘新物业还有其他想法或要求：
+      </label>
+<textarea class="w-full p-space-md rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline focus:outline-none" id="q10_feedback" placeholder="请输入您的想法或具体要求..." rows="3"></textarea>
+</div>
+</section>
+<!-- Part 4: General Questions -->
+<section class="rounded-xl p-space-lg bg-surface-container-lowest shadow-sm space-y-space-lg">
+<div class="flex items-center gap-space-sm">
+<span class="px-2 py-0.5 rounded bg-inverse-surface text-inverse-on-surface font-label-sm text-label-sm">第四部分</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">通用问题（所有业主均填写）</h2>
+</div>
+<!-- Question 11 -->
+<div class="space-y-space-sm">
+<p class="font-body-lg text-body-lg text-on-surface font-medium">
+        第11题：您目前是否存在物业欠费情况？ <span class="text-error font-bold">*</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-normal">（单选）</span>
+</p>
+<div class="grid grid-cols-2 gap-space-sm">
+<label class="choice-card flex items-center justify-between p-space-md rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none">
+<span class="font-label-lg text-label-lg">无欠费</span>
+<input class="hidden" name="q11_arrears" type="radio" value="none"/>
+<span class="radio-indicator w-5 h-5 rounded-full flex items-center justify-center bg-surface-variant">
+<span class="dot w-2 h-2 rounded-full bg-transparent"></span>
+</span>
+</label>
+<label class="choice-card flex items-center justify-between p-space-md rounded-xl bg-surface-container-low text-on-surface cursor-pointer select-none">
+<span class="font-label-lg text-label-lg">有欠费</span>
+<input class="hidden" name="q11_arrears" type="radio" value="exist"/>
+<span class="radio-indicator w-5 h-5 rounded-full flex items-center justify-center bg-surface-variant">
+<span class="dot w-2 h-2 rounded-full bg-transparent"></span>
+</span>
+</label>
+</div>
+</div>
+<!-- Question 12 -->
+<div class="space-y-space-sm">
+<label class="font-body-lg text-body-lg text-on-surface font-medium block" for="q12_feedback">
+        第12题：您对小区物业服务还有其他整体建议：
+      </label>
+<textarea class="w-full p-space-md rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline focus:outline-none" id="q12_feedback" placeholder="写下您对利安花园未来生活品质的期望与建议..." rows="3"></textarea>
+</div>
+</section>
+<!-- Bottom Thank You & Submission Card -->
+<section class="rounded-xl p-space-lg bg-surface-container text-on-surface space-y-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[24px]">favorite</span>
+<p class="font-body-md text-body-md text-on-surface font-medium leading-relaxed">
+        感谢您的参与！您的意见将作为业委会推进物业处置工作的重要依据。
+      </p>
+</div>
+<button class="w-full h-12 rounded-xl bg-primary text-on-primary font-headline-sm text-headline-sm flex items-center justify-center gap-space-xs shadow-md active:scale-[0.98] transition-transform" id="submitBtn" type="button">
+<span class="material-symbols-outlined text-[20px]">send</span>
+<span>提交问卷</span>
+</button>
+<div class="flex items-center justify-center gap-1.5 text-on-surface-variant pt-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">verified_user</span>
+<span class="font-label-sm text-label-sm">业委会加密存证 · 实名核验一户一票 · 隐私严格受保</span>
+</div>
+</section>
+</div>
+<script>
+  // Initialize default date to today
+  const today = new Date().toISOString().split('T')[0];
+  const dateInput = document.getElementById('fillDate');
+  if (dateInput) {
+    dateInput.value = today;
+  }
+
+  // Radio option highlighting
+  function updateRadioState(name) {
+    const radios = document.querySelectorAll(`input[name="${name}"]`);
+    radios.forEach(radio => {
+      const card = radio.closest('.choice-card');
+      const dot = card ? card.querySelector('.dot') : null;
+      const indicator = card ? card.querySelector('.radio-indicator') : null;
+
+      if (radio.checked) {
+        if (card) {
+          card.classList.remove('bg-surface-container-low', 'text-on-surface');
+          card.classList.add('bg-primary-container', 'text-on-primary');
+        }
+        if (dot) dot.classList.replace('bg-transparent', 'bg-primary');
+        if (indicator) {
+          indicator.classList.remove('bg-surface-variant');
+          indicator.classList.add('bg-surface-container-lowest');
+        }
+      } else {
+        if (card) {
+          card.classList.remove('bg-primary-container', 'text-on-primary');
+          card.classList.add('bg-surface-container-low', 'text-on-surface');
+        }
+        if (dot) dot.classList.replace('bg-primary', 'bg-transparent');
+        if (indicator) {
+          indicator.classList.remove('bg-surface-container-lowest');
+          indicator.classList.add('bg-surface-variant');
+        }
+      }
+    });
+  }
+
+  // Checkbox option highlighting
+  function updateCheckboxState(checkbox) {
+    const card = checkbox.closest('.checkbox-card');
+    const box = card ? card.querySelector('.check-box') : null;
+    if (checkbox.checked) {
+      if (card) {
+        card.classList.remove('bg-surface-container-low');
+        card.classList.add('bg-surface-container-high');
+      }
+      if (box) {
+        box.classList.remove('bg-surface-container-highest');
+        box.classList.add('bg-primary');
+        box.innerHTML = '<span class="material-symbols-outlined text-[16px]">check</span>';
+      }
+    } else {
+      if (card) {
+        card.classList.remove('bg-surface-container-high');
+        card.classList.add('bg-surface-container-low');
+      }
+      if (box) {
+        box.classList.remove('bg-primary');
+        box.classList.add('bg-surface-container-highest');
+        box.innerHTML = '';
+      }
+    }
+  }
+
+  // Handle Dynamic Sections & Routing for Q1
+  function handleQ1Change(value) {
+    const secA = document.getElementById('section-plan-a');
+    const secB = document.getElementById('section-plan-b');
+    const guideText = document.getElementById('guide-text');
+
+    if (value === 'planA') {
+      secA.classList.remove('opacity-40');
+      secB.classList.add('opacity-40');
+      guideText.textContent = '当前选择：方案A，请优先填写第二部分问卷。';
+    } else if (value === 'planB') {
+      secB.classList.remove('opacity-40');
+      secA.classList.add('opacity-40');
+      guideText.textContent = '当前选择：方案B，请优先填写第三部分问卷。';
+    } else {
+      secA.classList.remove('opacity-40');
+      secB.classList.remove('opacity-40');
+      guideText.textContent = '您选择暂不表态，可根据关心项选择性填写两组建议，或直接填写第四部分。';
+    }
+  }
+
+  // Event Listeners for Choice Cards
+  document.querySelectorAll('.choice-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const radio = card.querySelector('input[type="radio"]');
+      if (radio) {
+        radio.checked = true;
+        updateRadioState(radio.name);
+        if (radio.name === 'main_plan') {
+          handleQ1Change(radio.value);
+        }
+      }
+    });
+  });
+
+  // Event Listeners for Checkbox Cards
+  document.querySelectorAll('.checkbox-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      const checkbox = card.querySelector('input[type="checkbox"]');
+      if (checkbox && e.target !== checkbox) {
+        checkbox.checked = !checkbox.checked;
+        updateCheckboxState(checkbox);
+      }
+    });
+  });
+
+  // Submit Interaction & Feedback
+  document.getElementById('submitBtn').addEventListener('click', () => {
+    const room = document.getElementById('roomNumber').value.trim();
+    const planSelected = document.querySelector('input[name="main_plan"]:checked');
+
+    if (!room) {
+      alert('请填写您的房号以便核验一户一票身份');
+      document.getElementById('roomNumber').focus();
+      return;
+    }
+    if (!planSelected) {
+      alert('请在第一部分第1题中选择您的意向倾向');
+      return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[20px]">progress_activity</span><span>正在安全提交...</span>';
+    btn.classList.add('pointer-events-none', 'opacity-80');
+
+    setTimeout(() => {
+      btn.classList.remove('bg-primary');
+      btn.classList.add('bg-secondary');
+      btn.innerHTML = '<span class="material-symbols-outlined text-[20px]">check_circle</span><span>已成功提交问卷</span>';
+      alert('提交成功！感谢您为利安花园社区治理贡献宝贵的一票。');
+    }, 1200);
+  });
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/85 backdrop-blur-xl shadow-[0_-2px_12px_rgba(11,28,48,0.05)]" data-active-classes="text-primary font-semibold"><div class="h-16 px-margin grid grid-cols-2 gap-space-md items-center"><a class="flex flex-col items-center justify-center gap-0.5 py-1 text-on-surface-variant hover:text-on-surface transition-colors min-h-[48px] rounded-lg" data-path="questionnaire" href="#"><span class="material-symbols-outlined text-[24px]">assignment</span><span class="font-label-md text-label-md">问卷填写</span></a><a class="flex flex-col items-center justify-center gap-0.5 py-1 text-on-surface-variant hover:text-on-surface transition-colors min-h-[48px] rounded-lg" data-path="statistics" href="#"><span class="material-symbols-outlined text-[24px]">analytics</span><span class="font-label-md text-label-md">结果统计</span></a></div></nav></body></html>

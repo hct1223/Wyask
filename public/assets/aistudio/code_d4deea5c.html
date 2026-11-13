@@ -1,0 +1,431 @@
+<!DOCTYPE html><html class="h-full" lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
+<meta content="mobile_tab" name="shell-type">
+<title>问卷列表 - 利安花园业主表决平台</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+    @layer base {
+      html, body {
+        width: 100%;
+        min-height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        overscroll-behavior: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      .pt-safe {
+        padding-top: env(safe-area-inset-top, 0px);
+      }
+      main > :first-child {
+        margin-top: 0 !important;
+      }
+      main > :last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<script src="https://cdn.tailwindcss.com"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "inverse-surface": "#213145",
+            "on-primary-fixed-variant": "#173bab",
+            "tertiary": "#002e81",
+            "outline-variant": "#c4c5d5",
+            "on-secondary": "#ffffff",
+            "on-secondary-fixed-variant": "#005137",
+            "on-tertiary-fixed-variant": "#003ea8",
+            "secondary": "#006c4a",
+            "on-secondary-container": "#00714e",
+            "on-tertiary-container": "#a4b9ff",
+            "on-tertiary": "#ffffff",
+            "secondary-fixed-dim": "#68dba9",
+            "primary-fixed": "#dde1ff",
+            "on-primary-container": "#a8b8ff",
+            "secondary-fixed": "#85f8c4",
+            "tertiary-container": "#0042b2",
+            "on-primary-fixed": "#001453",
+            "error-container": "#ffdad6",
+            "surface-variant": "#d3e4fe",
+            "surface-container-lowest": "#ffffff",
+            "tertiary-fixed": "#dbe1ff",
+            "on-surface-variant": "#444653",
+            "on-error": "#ffffff",
+            "primary": "#00288e",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-tint": "#3755c3",
+            "on-secondary-fixed": "#002114",
+            "background": "#f8f9ff",
+            "inverse-primary": "#b8c4ff",
+            "on-surface": "#0b1c30",
+            "tertiary-fixed-dim": "#b4c5ff",
+            "primary-fixed-dim": "#b8c4ff",
+            "on-error-container": "#93000a",
+            "surface-container": "#e5eeff",
+            "on-tertiary-fixed": "#00174b",
+            "surface-dim": "#cbdbf5",
+            "secondary-container": "#82f5c1",
+            "surface-bright": "#f8f9ff",
+            "on-background": "#0b1c30",
+            "error": "#ba1a1a",
+            "surface-container-high": "#dce9ff",
+            "surface-container-low": "#eff4ff",
+            "surface-container-highest": "#d3e4fe",
+            "on-primary": "#ffffff",
+            "primary-container": "#1e40af",
+            "outline": "#757684",
+            "surface": "#f8f9ff"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          spacing: {
+            "margin": "1rem",
+            "space-sm": "0.5rem",
+            "space-xl": "1.5rem",
+            "margin-sm": "0.75rem",
+            "space-lg": "1rem",
+            "gutter-sm": "0.75rem",
+            "space-md": "0.75rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem"
+          },
+          fontFamily: {
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"]
+          },
+          fontSize: {
+            "headline-lg-mobile": ["22px", { "lineHeight": "30px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "label-lg": ["15px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "label-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased min-h-screen flex flex-col selection:bg-surface-variant">
+<header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+<div class="h-16 px-margin flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-xl bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">verified</span>
+</div>
+<div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-none">物业处置问卷·业主提交记录</span><span class="px-1.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed text-[10px] font-semibold leading-tight tracking-wider uppercase">业委会认证</span></div><span class="font-label-sm text-label-sm text-on-surface-variant leading-tight mt-0.5">利安花园业主大会秘书处 · 一户一票实名备案</span></div>
+</div>
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary text-[18px]">person</span>
+</div>
+</div>
+</header>
+<main class="flex-1 flex flex-col w-full pt-16 pb-24 bg-surface min-h-screen">
+<div class="flex flex-col w-full px-margin pb-6 gap-space-lg">
+<!-- 社区公信力统计看板 -->
+<div class="w-full rounded-xl bg-surface-container-low p-space-lg flex flex-col gap-space-md shadow-sm"><div class="flex items-center justify-between"><div class="flex items-center gap-space-xs"><span class="w-2 h-2 rounded-full bg-secondary"></span><span class="font-headline-sm text-headline-sm text-on-surface">问卷提交监督统计看板</span></div><span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-[13px] text-secondary">shield</span>区住建与司法监督</span></div><div class="grid grid-cols-3 gap-2 text-center pt-1"><div class="flex flex-col items-center bg-surface-container-lowest py-2.5 px-1 rounded-lg"><div class="flex items-baseline gap-0.5"><span class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold">586</span><span class="font-label-sm text-label-sm text-on-surface-variant">份</span></div><span class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">累计已交卷</span></div><div class="flex flex-col items-center bg-surface-container-lowest py-2.5 px-1 rounded-lg"><div class="flex items-baseline gap-0.5"><span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-bold">214</span><span class="font-label-sm text-label-sm text-on-surface-variant">户</span></div><span class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">待提交</span></div><div class="flex flex-col items-center bg-surface-container-lowest py-2.5 px-1 rounded-lg"><div class="flex items-baseline gap-0.5"><span class="font-headline-lg-mobile text-headline-lg-mobile text-secondary font-bold">73.2%</span></div><span class="font-label-sm text-label-sm text-secondary font-medium mt-0.5">已过2/3法定门槛</span></div></div><div class="flex items-center gap-space-xs bg-surface-container px-3 py-1.5 rounded-lg text-on-surface-variant"><span class="material-symbols-outlined text-[15px] text-primary shrink-0">verified_user</span><p class="font-body-sm text-body-sm leading-tight text-on-surface-variant">《民法典》第278条法定规则认证，每户独立表决权全程可溯源。</p></div></div>
+<!-- 分类筛选与搜索快速操作区 -->
+<div class="flex flex-col gap-space-sm"><div class="flex items-center gap-2 overflow-x-auto pb-1" id="filter-tabs"><button class="tab-btn px-3.5 py-1.5 rounded-full font-label-md text-label-md bg-primary text-on-primary font-medium shrink-0 transition-all">全部提交 (586)</button><button class="tab-btn px-3.5 py-1.5 rounded-full font-label-md text-label-md bg-surface-container text-on-surface-variant shrink-0 transition-all flex items-center gap-1">选方案B更换 (360)</button><button class="tab-btn px-3.5 py-1.5 rounded-full font-label-md text-label-md bg-surface-container text-on-surface-variant shrink-0 transition-all">选方案A续聘 (152)</button><button class="tab-btn px-3.5 py-1.5 rounded-full font-label-md text-label-md bg-surface-container text-on-surface-variant shrink-0 transition-all">暂不表态 (74)</button></div><div class="flex items-center justify-between text-on-surface-variant px-0.5 gap-2"><div class="flex items-center gap-1.5 bg-surface-container-lowest px-2.5 py-1.5 rounded-lg border border-outline-variant flex-1"><span class="material-symbols-outlined text-[16px] text-outline">search</span><input type="text" placeholder="搜索房号，如 1栋1202" class="bg-transparent text-body-sm text-on-surface w-full focus:outline-none placeholder:text-outline"></div><div class="flex items-center gap-1 shrink-0"><span class="material-symbols-outlined text-[14px]">swap_vert</span><span class="font-label-sm text-label-sm">按提交时间排序</span></div></div></div>
+<!-- 问卷卡片列表容器 -->
+<div class="flex flex-col gap-space-lg" id="card-list"><article class="survey-card w-full rounded-xl bg-surface-container-lowest p-space-lg flex flex-col gap-3 shadow-sm relative"><div class="flex items-center justify-between flex-wrap gap-1.5"><div class="flex items-center gap-2"><span class="font-headline-sm text-headline-sm text-on-surface font-bold">1栋 1202室</span><span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold flex items-center gap-0.5"><span class="material-symbols-outlined text-[13px]">verified</span>已验房产确权·一户一票</span></div><span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-0.5"><span class="material-symbols-outlined text-[14px]">schedule</span>10分钟前</span></div><div class="p-2.5 rounded-lg bg-surface-container-low flex flex-col gap-1.5"><div class="flex items-center justify-between"><span class="font-label-sm text-label-sm text-on-surface-variant">核心倾向选择</span><span class="font-label-sm text-label-sm font-bold text-error bg-error-container/30 px-2 py-0.5 rounded">方案B：更换新物业</span></div><div class="flex items-center gap-1.5 flex-wrap pt-0.5"><span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-[11px]">首选电梯与公区整改</span><span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-[11px]">主张重新公开招标</span></div></div><div class="pt-1"><button class="w-full h-10 px-3 rounded-lg bg-surface-container text-primary font-label-md text-label-md flex items-center justify-center gap-1 hover:bg-surface-container-high transition-colors font-semibold"><span class="material-symbols-outlined text-[18px]">assignment_turned_in</span>查看答卷详情</button></div></article><article class="survey-card w-full rounded-xl bg-surface-container-lowest p-space-lg flex flex-col gap-3 shadow-sm relative"><div class="flex items-center justify-between flex-wrap gap-1.5"><div class="flex items-center gap-2"><span class="font-headline-sm text-headline-sm text-on-surface font-bold">3栋 601室</span><span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold flex items-center gap-0.5"><span class="material-symbols-outlined text-[13px]">verified</span>已验房产确权</span></div><span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-0.5"><span class="material-symbols-outlined text-[14px]">schedule</span>35分钟前</span></div><div class="p-2.5 rounded-lg bg-surface-container-low flex flex-col gap-1.5"><div class="flex items-center justify-between"><span class="font-label-sm text-label-sm text-on-surface-variant">核心倾向选择</span><span class="font-label-sm text-label-sm font-bold text-error bg-error-container/30 px-2 py-0.5 rounded">方案B：更换新物业</span></div><div class="flex items-center gap-1.5 flex-wrap pt-0.5"><span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-[11px]">支持利用公共收益补贴</span><span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-[11px]">不接受单方调价</span></div></div><div class="pt-1"><button class="w-full h-10 px-3 rounded-lg bg-surface-container text-primary font-label-md text-label-md flex items-center justify-center gap-1 hover:bg-surface-container-high transition-colors font-semibold"><span class="material-symbols-outlined text-[18px]">assignment_turned_in</span>查看答卷详情</button></div></article><article class="survey-card w-full rounded-xl bg-surface-container-lowest p-space-lg flex flex-col gap-3 shadow-sm relative"><div class="flex items-center justify-between flex-wrap gap-1.5"><div class="flex items-center gap-2"><span class="font-headline-sm text-headline-sm text-on-surface font-bold">2栋 1803室</span><span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold flex items-center gap-0.5"><span class="material-symbols-outlined text-[13px]">verified</span>已验房产确权</span></div><span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-0.5"><span class="material-symbols-outlined text-[14px]">schedule</span>1小时前</span></div><div class="p-2.5 rounded-lg bg-surface-container-low flex flex-col gap-1.5"><div class="flex items-center justify-between"><span class="font-label-sm text-label-sm text-on-surface-variant">核心倾向选择</span><span class="font-label-sm text-label-sm font-bold text-primary bg-surface-container px-2 py-0.5 rounded">方案A：限期整改1个月</span></div><div class="flex items-center gap-1.5 flex-wrap pt-0.5"><span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-[11px]">满意度需达90%</span><span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-[11px]">要求公布账目明细</span></div></div><div class="pt-1"><button class="w-full h-10 px-3 rounded-lg bg-surface-container text-primary font-label-md text-label-md flex items-center justify-center gap-1 hover:bg-surface-container-high transition-colors font-semibold"><span class="material-symbols-outlined text-[18px]">assignment_turned_in</span>查看答卷详情</button></div></article><article class="survey-card w-full rounded-xl bg-surface-container-lowest p-space-lg flex flex-col gap-3 shadow-sm relative"><div class="flex items-center justify-between flex-wrap gap-1.5"><div class="flex items-center gap-2"><span class="font-headline-sm text-headline-sm text-on-surface font-bold">5栋 304室</span><span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold flex items-center gap-0.5"><span class="material-symbols-outlined text-[13px]">verified</span>已验房产确权</span></div><span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-0.5"><span class="material-symbols-outlined text-[14px]">schedule</span>2小时前</span></div><div class="p-2.5 rounded-lg bg-surface-container-low flex flex-col gap-1.5"><div class="flex items-center justify-between"><span class="font-label-sm text-label-sm text-on-surface-variant">核心倾向选择</span><span class="font-label-sm text-label-sm font-bold text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">暂不表态</span></div><div class="flex items-center gap-1.5 flex-wrap pt-0.5"><span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-[11px]">视后续宣讲会决定</span><span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-[11px]">无欠费户</span></div></div><div class="pt-1"><button class="w-full h-10 px-3 rounded-lg bg-surface-container text-primary font-label-md text-label-md flex items-center justify-center gap-1 hover:bg-surface-container-high transition-colors font-semibold"><span class="material-symbols-outlined text-[18px]">assignment_turned_in</span>查看答卷详情</button></div></article><article class="survey-card w-full rounded-xl bg-surface-container-lowest p-space-lg flex flex-col gap-3 shadow-sm relative"><div class="flex items-center justify-between flex-wrap gap-1.5"><div class="flex items-center gap-2"><span class="font-headline-sm text-headline-sm text-on-surface font-bold">7栋 902室</span><span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold flex items-center gap-0.5"><span class="material-symbols-outlined text-[13px]">verified</span>已验房产确权</span></div><span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-0.5"><span class="material-symbols-outlined text-[14px]">schedule</span>3小时前</span></div><div class="p-2.5 rounded-lg bg-surface-container-low flex flex-col gap-1.5"><div class="flex items-center justify-between"><span class="font-label-sm text-label-sm text-on-surface-variant">核心倾向选择</span><span class="font-label-sm text-label-sm font-bold text-error bg-error-container/30 px-2 py-0.5 rounded">方案B：更换新物业</span></div><div class="flex items-center gap-1.5 flex-wrap pt-0.5"><span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-[11px]">电梯故障响应慢</span><span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-[11px]">要求履约保证金</span></div></div><div class="pt-1"><button class="w-full h-10 px-3 rounded-lg bg-surface-container text-primary font-label-md text-label-md flex items-center justify-center gap-1 hover:bg-surface-container-high transition-colors font-semibold"><span class="material-symbols-outlined text-[18px]">assignment_turned_in</span>查看答卷详情</button></div></article></div>
+<!-- 业主知情权微底栏保障卡 -->
+<div class="w-full rounded-xl bg-surface-container-high/60 p-space-md flex items-start gap-space-sm"><span class="material-symbols-outlined text-primary text-[20px] mt-0.5">lock</span><div class="flex flex-col"><span class="font-label-md text-label-md text-on-surface font-semibold">利安花园公信力保障机制</span><p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">所有答卷均经区块链哈希存证，业委会与见证律所共同监管，杜绝代填刷票。</p></div></div>
+<!-- 问卷详情交互抽屉 / 模态卡片 (默认隐藏，点击任意问卷触发展示) -->
+<div class="fixed inset-0 z-50 flex items-end justify-center bg-inverse-surface/40 backdrop-blur-sm transition-opacity duration-200 hidden opacity-0" id="detail-drawer" onclick="closeDrawerOnBackdrop(event)">
+<div class="w-full max-w-lg bg-surface-container-lowest rounded-t-2xl shadow-xl flex flex-col max-h-[85dvh] overflow-hidden animate-in slide-in-from-bottom duration-300" onclick="event.stopPropagation()">
+<!-- 抽屉顶部拖动条与关闭头 -->
+<div class="relative px-margin pt-3 pb-2 flex items-center justify-between border-b border-transparent bg-surface-container-low">
+<div class="w-10 h-1 rounded-full bg-outline-variant absolute left-1/2 -translate-x-1/2 top-2"></div>
+<div class="flex items-center gap-1.5 mt-2">
+<span class="material-symbols-outlined text-primary text-[20px]">assignment</span>
+<span class="font-headline-sm text-headline-sm text-on-surface" id="drawer-header-title">问卷备案详情</span>
+</div>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors mt-2" onclick="closeDetailDrawer()">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- 抽屉内部滚动详情区 -->
+<div class="flex-1 overflow-y-auto px-margin py-4 flex flex-col gap-space-md text-on-surface">
+<!-- 核心属性元信息模块 -->
+<div class="bg-surface-container-low rounded-xl p-3 flex flex-col gap-2">
+<div class="flex items-start justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">备案文号</span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold text-right" id="drawer-doc-no">利业秘字[2025]第003号</span>
+</div>
+<div class="flex items-start justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">发起组织</span>
+<span class="font-label-sm text-label-sm text-on-surface font-medium" id="drawer-sponsor">利安花园业主大会秘书处</span>
+</div>
+<div class="flex items-start justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">公证见证方</span>
+<span class="font-label-sm text-label-sm text-secondary font-medium" id="drawer-notary">广东广信君达律师事务所</span>
+</div>
+<div class="flex items-start justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">有效时间范围</span>
+<span class="font-label-sm text-label-sm text-on-surface" id="drawer-period">2025.04.10 - 2025.04.25</span>
+</div>
+<div class="flex items-start justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">投票表决对象</span>
+<span class="font-label-sm text-label-sm text-on-surface font-medium" id="drawer-scope">利安花园1-8栋全体产权业主</span>
+</div>
+</div>
+<!-- 议题背景说明 -->
+<div class="flex flex-col gap-1">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">议题立项事由</span>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed" id="drawer-description">
+            针对2025年度物业履职评估到期后的处置意向征集。根据《利安花园业主大会议事规则》，本次问卷结果将作为后续召开临时业主大会立案表决的法定前置基础。
+          </p>
+</div>
+<!-- 问卷题目结构大纲模块 -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">问卷结构大纲 (共12题)</span>
+<span class="font-label-sm text-label-sm text-primary">预计耗时约 3 分钟</span>
+</div>
+<div class="grid grid-cols-1 gap-2" id="drawer-outline">
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container">
+<div class="flex items-center gap-2">
+<span class="w-5 h-5 rounded-full bg-primary-container text-on-primary text-[11px] font-bold flex items-center justify-center">1</span>
+<span class="font-body-md text-body-md text-on-surface">基础履职满意度核实</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">1 题 · 单选</span>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container">
+<div class="flex items-center gap-2">
+<span class="w-5 h-5 rounded-full bg-primary-container text-on-primary text-[11px] font-bold flex items-center justify-center">2</span>
+<span class="font-body-md text-body-md text-on-surface">续聘整改 vs 重新选聘核心意向</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-medium">8 题 · 重点表决</span>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container">
+<div class="flex items-center gap-2">
+<span class="w-5 h-5 rounded-full bg-primary-container text-on-primary text-[11px] font-bold flex items-center justify-center">3</span>
+<span class="font-body-md text-body-md text-on-surface">物业费收缴与质价相符诉求</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">3 题 · 多选及简答</span>
+</div>
+</div>
+</div>
+<!-- 参与须知与公信力说明 -->
+<div class="p-3 rounded-xl bg-secondary-fixed/30 flex flex-col gap-1.5 text-on-secondary-fixed-variant">
+<div class="flex items-center gap-1 font-label-md text-label-md font-semibold text-secondary">
+<span class="material-symbols-outlined text-[17px]">how_to_reg</span>
+<span>合规须知与认证保护</span>
+</div>
+<ul class="font-body-sm text-body-sm list-disc pl-4 space-y-0.5 text-on-surface-variant">
+<li>严格执行「一房一户一票」，系统自动匹配房产证号或网签备案信息。</li>
+<li>提交后系统将生成唯一下游数字签名存证，业主姓名与电话将隐位脱敏处理。</li>
+<li>表决结束后的统计数据将作为法定公示附录。</li>
+</ul>
+</div>
+</div>
+<!-- 抽屉底部固定操作按钮 -->
+<div class="p-margin bg-surface-container-low flex items-center gap-space-sm">
+<button class="flex-1 h-12 rounded-lg bg-surface-container text-on-surface font-label-lg text-label-lg flex items-center justify-center gap-1 font-medium" onclick="closeDetailDrawer()">
+          返回列表
+        </button>
+<button class="flex-[2] h-12 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-1 font-semibold shadow-md active:scale-95 transition-all" id="drawer-primary-btn" onclick="handleDrawerPrimaryAction()">
+<span class="material-symbols-outlined text-[20px]">how_to_vote</span>
+<span id="drawer-primary-btn-label">立即前往填写</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // 问卷元数据定义
+  const surveyData = {
+    'property-plan': {
+      title: '利安花园物业处置方案业主意向调查问卷',
+      docNo: '利业秘字[2025]第003号',
+      sponsor: '利安花园业主大会秘书处',
+      notary: '广东广信君达律师事务所',
+      period: '2025.04.10 - 2025.04.20 (仅剩3天)',
+      scope: '利安花园1-8栋全体产权业主 (已绑房号)',
+      description: '针对2025年度物业履职评估到期后的处置意向征集。提供「方案A：续聘并责令实质性整改」与「方案B：启动公开重新招选」两条路线供全体业主裁定。',
+      status: 'ongoing',
+      btnLabel: '立即前往填写问卷',
+      isFillable: true
+    },
+    'ev-charger': {
+      title: '小区新能源汽车充电桩加装点位民意调研',
+      docNo: '利业秘字[2025]第002号',
+      sponsor: '小区工程与设施监督小组',
+      notary: '天河区住建指导站备案',
+      period: '2025.04.05 - 2025.04.28 (仅剩12天)',
+      scope: '利安花园车位业主及常住燃油/电车车主',
+      description: '拟在地下车库B区及地面非机动车道旁增设40个智能慢充桩方案征询，需评估公摊电表接入与业主安装意向、分摊方案。',
+      status: 'ongoing',
+      btnLabel: '去填写本问卷',
+      isFillable: true
+    },
+    'public-revenue': {
+      title: '2024-2025年公共收益收支透明度与分红调研',
+      docNo: '利业公字[2025]第001号',
+      sponsor: '利安花园财务审计监督委员会',
+      notary: '南方公证处存证见证',
+      period: '已于 2025.03.30 封存结题',
+      scope: '全体利安花园产权业主',
+      description: '关于电梯广告、地面临停等公共收益补充维修基金与业主现金回馈表决。718户参与，赞成方案一占比88.4%，见证报告已存档。',
+      status: 'publicized',
+      btnLabel: '查看已公示公证书与统计',
+      isFillable: false
+    },
+    'fire-system': {
+      title: '利安花园2024年消防管网系统维保修缮专项问卷',
+      docNo: '利业规字[2024]第009号',
+      sponsor: '第四届业主委员会执行处',
+      notary: '区消防救援大队见证备案',
+      period: '已于 2024.11.18 办结并施工',
+      scope: '利安花园全体业主及物业管理处',
+      description: '涉及使用专项维修资金应急排查地下供水压力不足问题，方案经业主大会过半数同意，已交由市政施工方履约。',
+      status: 'archived',
+      btnLabel: '查阅完整归档卷宗',
+      isFillable: false
+    }
+  };
+
+  let activeSurveyKey = 'property-plan';
+
+  // 选项卡筛选逻辑
+  function filterQuestionnaires(status) {
+    const tabs = document.querySelectorAll('#filter-tabs button');
+    tabs.forEach(tab => {
+      tab.classList.remove('bg-primary', 'text-on-primary');
+      tab.classList.add('bg-surface-container', 'text-on-surface-variant');
+    });
+    event.currentTarget.classList.remove('bg-surface-container', 'text-on-surface-variant');
+    event.currentTarget.classList.add('bg-primary', 'text-on-primary');
+
+    const cards = document.querySelectorAll('.survey-card');
+    let visibleCount = 0;
+    cards.forEach(card => {
+      if (status === 'all' || card.getAttribute('data-status') === status) {
+        card.style.display = 'flex';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    const counter = document.getElementById('result-counter');
+    if (counter) {
+      counter.innerText = `显示共 ${visibleCount} 份议题`;
+    }
+  }
+
+  // 打开抽屉
+  function openDetailDrawer(key) {
+    activeSurveyKey = key;
+    const item = surveyData[key] || surveyData['property-plan'];
+    
+    document.getElementById('drawer-header-title').innerText = '问卷详情与规程';
+    document.getElementById('drawer-doc-no').innerText = item.docNo;
+    document.getElementById('drawer-sponsor').innerText = item.sponsor;
+    document.getElementById('drawer-notary').innerText = item.notary;
+    document.getElementById('drawer-period').innerText = item.period;
+    document.getElementById('drawer-scope').innerText = item.scope;
+    document.getElementById('drawer-description').innerText = item.description;
+    
+    const primaryBtnLabel = document.getElementById('drawer-primary-btn-label');
+    if (primaryBtnLabel) {
+      primaryBtnLabel.innerText = item.btnLabel;
+    }
+
+    const drawer = document.getElementById('detail-drawer');
+    drawer.classList.remove('hidden');
+    // 动画延时淡入
+    setTimeout(() => {
+      drawer.classList.remove('opacity-0');
+    }, 10);
+  }
+
+  // 关闭抽屉
+  function closeDetailDrawer() {
+    const drawer = document.getElementById('detail-drawer');
+    drawer.classList.add('opacity-0');
+    setTimeout(() => {
+      drawer.classList.add('hidden');
+    }, 200);
+  }
+
+  function closeDrawerOnBackdrop(e) {
+    if (e.target === document.getElementById('detail-drawer')) {
+      closeDetailDrawer();
+    }
+  }
+
+  // 动作分发
+  function startSurvey(key) {
+    window.location.hash = `#fill?id=${key}`;
+  }
+
+  function viewPublicResults(key) {
+    window.location.hash = `#stats?id=${key}`;
+  }
+
+  function handleDrawerPrimaryAction() {
+    const item = surveyData[activeSurveyKey];
+    if (item && item.isFillable) {
+      startSurvey(activeSurveyKey);
+    } else {
+      viewPublicResults(activeSurveyKey);
+    }
+    closeDetailDrawer();
+  }
+</script>
+</main>
+<nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/85 backdrop-blur-xl shadow-[0_-2px_12px_rgba(11,28,48,0.05)]" data-active-classes="text-primary font-semibold">
+<div class="h-16 px-margin grid grid-cols-3 gap-space-sm items-center">
+<a class="flex flex-col items-center justify-center gap-0.5 py-1 text-on-surface-variant hover:text-on-surface transition-colors min-h-[48px] rounded-lg" data-path="questionnaire-list" href="#">
+<span class="material-symbols-outlined text-[24px]">view_list</span>
+<span class="font-label-md text-label-md">问卷列表</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-0.5 py-1 text-on-surface-variant hover:text-on-surface transition-colors min-h-[48px] rounded-lg" data-path="questionnaire-fill" href="#">
+<span class="material-symbols-outlined text-[24px]">edit_note</span>
+<span class="font-label-md text-label-md">问卷填写</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-0.5 py-1 text-on-surface-variant hover:text-on-surface transition-colors min-h-[48px] rounded-lg" data-path="statistics-analysis" href="#">
+<span class="material-symbols-outlined text-[24px]">analytics</span>
+<span class="font-label-md text-label-md">结果统计</span>
+</a>
+</div>
+</nav>
+
+
+</body></html>

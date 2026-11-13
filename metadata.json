@@ -1,0 +1,6 @@
+{
+  "name": "利安花园业主表决平台",
+  "description": "利安花园物业处置方案业主调查问卷、实时统计分析、可视化PDF导出与链接分享平台",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
