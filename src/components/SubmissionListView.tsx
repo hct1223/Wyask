@@ -13,6 +13,7 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import { PLAN_LABELS, type MainPlan, type SurveySubmission } from '../types/survey';
 import { formatRelativeTime } from '../utils/format';
+import { readJsonSafe } from '../utils/http';
 import { SubmissionDetailDrawer } from './SubmissionDetailDrawer';
 
 interface SubmissionListViewProps {
@@ -46,6 +47,7 @@ export function SubmissionListView({
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [fetchError, setFetchError] = useState('');
   const [selectedSubmission, setSelectedSubmission] = useState<SurveySubmission | null>(null);
 
   useEffect(() => {
@@ -56,6 +58,7 @@ export function SubmissionListView({
     async (offset = 0, append = false) => {
       if (append) setLoadingMore(true);
       else setLoading(true);
+      setFetchError('');
 
       try {
         const params = new URLSearchParams({
@@ -66,13 +69,17 @@ export function SubmissionListView({
           offset: String(offset),
         });
         const res = await fetch(`/api/submissions?${params.toString()}`);
-        if (!res.ok) throw new Error('fetch failed');
-        const data: SubmissionsResponse = await res.json();
+        const parsed = await readJsonSafe<SubmissionsResponse & { message?: string }>(res);
+        if (!parsed.ok || !parsed.data) {
+          throw new Error(parsed.data?.message || parsed.errorMessage || '获取提交记录失败');
+        }
+        const data = parsed.data;
         setItems((prev) => (append ? [...prev, ...data.items] : data.items));
         setHasMore(data.hasMore);
         setCounts(data.counts);
       } catch (err) {
         console.error(err);
+        setFetchError(err instanceof Error ? err.message : '加载失败，请重试');
       } finally {
         setLoading(false);
         setLoadingMore(false);
@@ -88,7 +95,7 @@ export function SubmissionListView({
     return () => clearTimeout(timer);
   }, [fetchList, refreshTrigger]);
 
-  const totalHouseholds = 800;
+  const totalHouseholds = 556;
   const pendingCount = Math.max(0, totalHouseholds - counts.total);
   const coverageRate = ((counts.total / totalHouseholds) * 100).toFixed(1);
   const quorumMet = Number(coverageRate) >= 66.7;
@@ -235,6 +242,17 @@ export function SubmissionListView({
             </div>
           ))}
         </div>
+      ) : fetchError ? (
+        <div className="rounded-xl bg-surface-container-lowest p-8 text-center space-y-3 shadow-sm">
+          <p className="text-[15px] font-semibold text-on-surface">{fetchError}</p>
+          <button
+            type="button"
+            onClick={() => fetchList(0, false)}
+            className="h-10 px-4 rounded-lg bg-primary text-on-primary text-[13px] font-semibold cursor-pointer"
+          >
+            重新加载
+          </button>
+        </div>
       ) : items.length === 0 ? (
         <div className="rounded-xl bg-surface-container-lowest p-8 text-center space-y-3 shadow-sm">
           {search.trim() || planFilter !== 'all' ? (
@@ -275,7 +293,7 @@ export function SubmissionListView({
               className="w-full rounded-xl bg-surface-container-lowest p-4 flex flex-col gap-3 shadow-sm"
             >
               <div className="flex items-center justify-between flex-wrap gap-1.5">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-[16px] font-bold text-on-surface">
                     {item.roomNumber}
                   </span>

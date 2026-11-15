@@ -101,7 +101,7 @@ function renderReportPages(stats: SurveyStats): HTMLCanvasElement[] {
       ? '无欠费户组'
       : stats.filterGroup === 'exist'
       ? '欠费户组'
-      : '全小区总体 (800户)';
+      : `全小区总体 (${stats.totalHouseholds}户)`;
   const nowStr = new Date(stats.lastUpdated).toLocaleString('zh-CN', {
     hour12: false,
   });

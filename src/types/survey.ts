@@ -49,6 +49,8 @@ export const FEE_ADJUST_LABELS: Record<FeeAdjustChoice, string> = {
 
 export interface SurveySubmissionPayload {
   roomNumber: string;
+  ownerName: string;
+  ownerPhone: string;
   fillDate: string;
   mainPlan: MainPlan;
   q2Agreement?: AgreementChoice;

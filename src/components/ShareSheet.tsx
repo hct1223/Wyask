@@ -2,17 +2,17 @@ import { Check, Copy, Download, Link2, QrCode, X } from 'lucide-react';
 import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
 import { copyTextToClipboard } from '../utils/format';
-import type { ActiveTab } from './Header';
+import type { PublicTab } from './Header';
 
 interface ShareSheetProps {
   isOpen: boolean;
   onClose: () => void;
-  defaultTarget?: ActiveTab;
+  defaultTarget?: PublicTab;
   highlightRoom?: string;
 }
 
 const TARGET_INFO: Record<
-  ActiveTab,
+  PublicTab,
   { label: string; title: string; desc: string }
 > = {
   fill: {
@@ -38,7 +38,7 @@ export function ShareSheet({
   defaultTarget = 'fill',
   highlightRoom,
 }: ShareSheetProps) {
-  const [target, setTarget] = useState<ActiveTab>(defaultTarget);
+  const [target, setTarget] = useState<PublicTab>(defaultTarget);
   const [qrDataUrl, setQrDataUrl] = useState<string>('');
   const [copied, setCopied] = useState(false);
 
@@ -49,7 +49,7 @@ export function ShareSheet({
     }
   }, [isOpen, defaultTarget]);
 
-  const buildShareUrl = (tab: ActiveTab) => {
+  const buildShareUrl = (tab: PublicTab) => {
     const url = new URL(window.location.href);
     url.search = '';
     url.hash = '';
@@ -196,7 +196,7 @@ export function ShareSheet({
         <div className="p-4 space-y-4 overflow-y-auto">
           {/* Target Selector */}
           <div className="grid grid-cols-3 gap-1.5 p-1 bg-surface-container rounded-xl">
-            {(['fill', 'stats', 'list'] as ActiveTab[]).map((tabKey) => (
+            {(['fill', 'stats', 'list'] as PublicTab[]).map((tabKey) => (
               <button
                 key={tabKey}
                 type="button"

@@ -15,7 +15,7 @@ import type {
 } from '../src/types/survey.ts';
 import { PRIORITY_OPTIONS } from '../src/types/survey.ts';
 
-const TOTAL_HOUSEHOLDS = 800;
+const TOTAL_HOUSEHOLDS = 556;
 const DATA_DIR = path.resolve(process.cwd(), 'data');
 const DATA_FILE = path.join(DATA_DIR, 'submissions.json');
 
@@ -66,11 +66,44 @@ function buildTags(payload: SurveySubmissionPayload): string[] {
   return tags.slice(0, 3);
 }
 
+function maskOwnerName(raw?: string): string {
+  const name = (raw || '').trim();
+  if (!name) return '已登记';
+  const chars = Array.from(name);
+  if (chars.length === 1) return `${chars[0]}*`;
+  if (chars.length === 2) return `${chars[0]}*`;
+  return `${chars[0]}${'*'.repeat(chars.length - 2)}${chars[chars.length - 1]}`;
+}
+
+function maskPhone(raw?: string): string {
+  const digits = (raw || '').replace(/\D/g, '');
+  if (digits.length >= 7) {
+    return `${digits.slice(0, 3)}****${digits.slice(-4)}`;
+  }
+  return digits ? '已脱敏保密' : '未登记';
+}
+
 class SurveyStore {
   private submissions: SurveySubmission[] = [];
 
   constructor() {
     this.load();
+  }
+
+  toPublicSubmission(sub: SurveySubmission): SurveySubmission {
+    const clean = { ...sub } as SurveySubmission & {
+      wechatOpenId?: string;
+      wechatNickname?: string;
+      wechatAuthorized?: boolean;
+    };
+    delete clean.wechatOpenId;
+    delete clean.wechatNickname;
+    delete clean.wechatAuthorized;
+    return {
+      ...clean,
+      ownerName: maskOwnerName(sub.ownerName),
+      ownerPhone: maskPhone(sub.ownerPhone),
+    };
   }
 
   private load() {
@@ -123,8 +156,16 @@ class SurveyStore {
     sort?: string;
     limit?: number;
     offset?: number;
+    includeSensitive?: boolean;
   }) {
-    const { plan = 'all', search = '', sort = 'newest', limit = 30, offset = 0 } = opts;
+    const {
+      plan = 'all',
+      search = '',
+      sort = 'newest',
+      limit = 30,
+      offset = 0,
+      includeSensitive = false,
+    } = opts;
     let list = [...this.submissions];
 
     if (plan === 'planA' || plan === 'planB' || plan === 'planC') {
@@ -132,13 +173,22 @@ class SurveyStore {
     }
 
     if (search.trim()) {
-      const q = search.trim().replace(/\s+/g, '').toUpperCase();
-      list = list.filter(
-        (item) =>
-          item.roomNumber.replace(/\s+/g, '').toUpperCase().includes(q) ||
-          item.normalizedRoom.includes(q) ||
-          item.receiptHash.includes(q)
-      );
+      const rawQ = search.trim();
+      const qUpper = rawQ.replace(/\s+/g, '').toUpperCase();
+      list = list.filter((item) => {
+        const basicHit =
+          item.roomNumber.replace(/\s+/g, '').toUpperCase().includes(qUpper) ||
+          item.normalizedRoom.includes(qUpper) ||
+          item.receiptHash.includes(qUpper);
+        if (basicHit) return true;
+        if (includeSensitive) {
+          return (
+            (item.ownerName || '').includes(rawQ) ||
+            (item.ownerPhone || '').includes(rawQ)
+          );
+        }
+        return false;
+      });
     }
 
     list.sort((a, b) => {
@@ -148,7 +198,10 @@ class SurveyStore {
     });
 
     const totalFiltered = list.length;
-    const items = list.slice(offset, offset + limit);
+    const sliced = list.slice(offset, offset + limit);
+    const items = includeSensitive
+      ? sliced
+      : sliced.map((s) => this.toPublicSubmission(s));
 
     return {
       items,
@@ -158,23 +211,35 @@ class SurveyStore {
     };
   }
 
-  getById(id: string): SurveySubmission | undefined {
-    return this.submissions.find((s) => s.id === id);
+  getById(id: string, includeSensitive = false): SurveySubmission | undefined {
+    const found = this.submissions.find((s) => s.id === id);
+    if (!found) return undefined;
+    return includeSensitive ? found : this.toPublicSubmission(found);
   }
 
   findByRoom(rawRoom: string): SurveySubmission | undefined {
     const norm = normalizeRoomNumber(rawRoom);
-    return this.submissions.find((s) => s.normalizedRoom === norm);
+    const found = this.submissions.find((s) => s.normalizedRoom === norm);
+    return found ? this.toPublicSubmission(found) : undefined;
   }
 
   createSubmission(
     payload: SurveySubmissionPayload
   ):
-    | { ok: true; submission: SurveySubmission }
+    | { ok: true; submission: SurveySubmission; rawSubmission: SurveySubmission }
     | { ok: false; status: number; message: string; existing?: SurveySubmission } {
     const rawRoom = payload.roomNumber?.trim() || '';
+    const ownerName = payload.ownerName?.trim() || '';
+    const ownerPhone = (payload.ownerPhone || '').replace(/[\s-]/g, '').trim();
+
     if (!rawRoom) {
       return { ok: false, status: 400, message: '请填写您的房号以便核验一户一票身份' };
+    }
+    if (!ownerName) {
+      return { ok: false, status: 400, message: '请填写业主姓名以便核验身份' };
+    }
+    if (!/^1[3-9]\d{9}$/.test(ownerPhone)) {
+      return { ok: false, status: 400, message: '请填写有效的11位手机号码' };
     }
     if (!payload.mainPlan || !['planA', 'planB', 'planC'].includes(payload.mainPlan)) {
       return { ok: false, status: 400, message: '请在第一部分第1题中选择您的意向倾向' };
@@ -190,17 +255,19 @@ class SurveyStore {
         ok: false,
         status: 409,
         message: `房号「${existing.roomNumber}」已完成一户一票实名备案，不可重复提交。`,
-        existing,
+        existing: this.toPublicSubmission(existing),
       };
     }
 
     const now = new Date().toISOString();
     const displayRoom = formatDisplayRoom(rawRoom);
     const id = `sub-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
-    const receiptHash = makeHash(`${normalizedRoom}-${now}-${id}`);
+    const receiptHash = makeHash(`${normalizedRoom}-${ownerName}-${now}-${id}`);
 
     const record: SurveySubmission = {
       ...payload,
+      ownerName,
+      ownerPhone,
       id,
       roomNumber: displayRoom,
       normalizedRoom,
@@ -213,7 +280,81 @@ class SurveyStore {
     this.submissions.unshift(record);
     this.save();
 
-    return { ok: true, submission: record };
+    return { ok: true, submission: this.toPublicSubmission(record), rawSubmission: record };
+  }
+
+  updateSubmission(
+    id: string,
+    payload: SurveySubmissionPayload
+  ):
+    | { ok: true; submission: SurveySubmission; rawSubmission: SurveySubmission }
+    | { ok: false; status: number; message: string } {
+    const idx = this.submissions.findIndex((s) => s.id === id);
+    if (idx === -1) {
+      return { ok: false, status: 404, message: '未找到要修改的问卷记录' };
+    }
+
+    const rawRoom = payload.roomNumber?.trim() || '';
+    const ownerName = payload.ownerName?.trim() || '';
+    const ownerPhone = (payload.ownerPhone || '').replace(/[\s-]/g, '').trim();
+
+    if (!rawRoom) {
+      return { ok: false, status: 400, message: '请填写房号' };
+    }
+    if (!ownerName) {
+      return { ok: false, status: 400, message: '请填写业主姓名' };
+    }
+    if (!/^1[3-9]\d{9}$/.test(ownerPhone)) {
+      return { ok: false, status: 400, message: '请填写有效的11位手机号码' };
+    }
+    if (!payload.mainPlan || !['planA', 'planB', 'planC'].includes(payload.mainPlan)) {
+      return { ok: false, status: 400, message: '请选择核心意向方案' };
+    }
+    if (!payload.q11Arrears || !['none', 'exist'].includes(payload.q11Arrears)) {
+      return { ok: false, status: 400, message: '请选择物业欠费状态' };
+    }
+
+    const normalizedRoom = normalizeRoomNumber(rawRoom);
+    const conflict = this.submissions.find(
+      (s) => s.id !== id && s.normalizedRoom === normalizedRoom
+    );
+    if (conflict) {
+      return {
+        ok: false,
+        status: 409,
+        message: `房号「${conflict.roomNumber}」已被另一条备案记录占用，不能重复。`,
+      };
+    }
+
+    const current = this.submissions[idx];
+    const displayRoom = formatDisplayRoom(rawRoom);
+    const updated: SurveySubmission = {
+      ...payload,
+      id: current.id,
+      roomNumber: displayRoom,
+      normalizedRoom,
+      ownerName,
+      ownerPhone,
+      fillDate: payload.fillDate || current.fillDate,
+      submittedAt: current.submittedAt,
+      receiptHash: current.receiptHash,
+      tags: buildTags(payload),
+    };
+
+    this.submissions[idx] = updated;
+    this.save();
+
+    return { ok: true, submission: this.toPublicSubmission(updated), rawSubmission: updated };
+  }
+
+  deleteSubmission(id: string): { ok: true; deletedId: string } | { ok: false; status: number; message: string } {
+    const idx = this.submissions.findIndex((s) => s.id === id);
+    if (idx === -1) {
+      return { ok: false, status: 404, message: '未找到要删除的问卷记录' };
+    }
+    this.submissions.splice(idx, 1);
+    this.save();
+    return { ok: true, deletedId: id };
   }
 
   computeStats(filterGroup: FilterGroup = 'all'): SurveyStats {
@@ -406,10 +547,12 @@ class SurveyStore {
     };
   }
 
-  toCsv(): string {
+  toCsv(filterGroup: FilterGroup = 'all'): string {
     const headers = [
       '备案编号',
       '房号',
+      '业主姓名(脱敏)',
+      '联系电话(脱敏)',
       '填写日期',
       '提交时间',
       'Q1核心意向',
@@ -447,23 +590,33 @@ class SurveyStore {
       reject: '不接受上调',
       uncertain: '视幅度与服务明细而定',
     };
+    const priorityMap = new Map(PRIORITY_OPTIONS.map((p) => [p.key, p.shortLabel]));
+    const formatPriorities = (keys?: PriorityKey[]) =>
+      (keys || []).map((k) => priorityMap.get(k) || k).join(' | ');
 
-    const rows = this.submissions.map((s) =>
+    const filtered =
+      filterGroup === 'all'
+        ? this.submissions
+        : this.submissions.filter((s) => s.q11Arrears === filterGroup);
+
+    const rows = filtered.map((s) =>
       [
         s.id,
         s.roomNumber,
+        maskOwnerName(s.ownerName),
+        maskPhone(s.ownerPhone),
         s.fillDate,
         s.submittedAt,
         planMap[s.mainPlan],
         s.q2Agreement ? agreeMap[s.q2Agreement] : '',
         s.q3Agreement ? agreeMap[s.q3Agreement] : '',
-        (s.q4Priorities || []).join('|'),
+        formatPriorities(s.q4Priorities),
         s.q4Other || '',
         s.q5Feedback || '',
         s.q6Agreement ? agreeMap[s.q6Agreement] : '',
         s.q7FeeAdjust ? feeMap[s.q7FeeAdjust] : '',
         s.q8Ads ? agreeMap[s.q8Ads] : '',
-        (s.q9Priorities || []).join('|'),
+        formatPriorities(s.q9Priorities),
         s.q9Other || '',
         s.q10Feedback || '',
         s.q11Arrears === 'none' ? '无欠费' : '有欠费',

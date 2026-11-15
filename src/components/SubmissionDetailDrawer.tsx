@@ -60,6 +60,12 @@ export function SubmissionDetailDrawer({
               <span className="font-semibold text-on-surface">{submission.roomNumber}</span>
             </div>
             <div className="flex items-center justify-between gap-2">
+              <span className="text-on-surface-variant">业主核验（脱敏）</span>
+              <span className="font-semibold text-secondary">
+                {submission.ownerName || '已登记'} · {submission.ownerPhone || '已脱敏'}
+              </span>
+            </div>
+            <div className="flex items-center justify-between gap-2">
               <span className="text-on-surface-variant">提交时间</span>
               <span className="text-on-surface tabular-nums">
                 {submission.fillDate}（{formatRelativeTime(submission.submittedAt)}）

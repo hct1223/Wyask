@@ -22,6 +22,7 @@ import {
   type PriorityKey,
   type SurveySubmission,
 } from '../types/survey';
+import { readJsonSafe } from '../utils/http';
 
 interface SurveyFillViewProps {
   onSubmitted: (submission: SurveySubmission) => void;
@@ -45,6 +46,9 @@ export function SurveyFillView({
   const today = new Date().toISOString().slice(0, 10);
 
   const [roomNumber, setRoomNumber] = useState('');
+  const [ownerName, setOwnerName] = useState('');
+  const [ownerPhone, setOwnerPhone] = useState('');
+  const [phoneInvalidHint, setPhoneInvalidHint] = useState(false);
   const [fillDate, setFillDate] = useState(today);
   const [mainPlan, setMainPlan] = useState<MainPlan | ''>('');
 
@@ -83,8 +87,12 @@ export function SurveyFillView({
       const res = await fetch(
         `/api/submissions/check?room=${encodeURIComponent(trimmed)}`
       );
-      if (!res.ok) return;
-      const data = await res.json();
+      const parsed = await readJsonSafe<{
+        exists?: boolean;
+        existing?: SurveySubmission | null;
+      }>(res);
+      if (!parsed.ok || !parsed.data) return;
+      const data = parsed.data;
       if (data.exists && data.existing) {
         setRoomCheckStatus('taken');
         setDuplicateRecord(data.existing);
@@ -127,6 +135,18 @@ export function SurveyFillView({
       document.getElementById('roomNumber')?.focus();
       return;
     }
+    if (!ownerName.trim()) {
+      setErrorMsg('请填写业主姓名以便核验身份');
+      document.getElementById('ownerName')?.focus();
+      return;
+    }
+    const cleanPhone = ownerPhone.replace(/[\s-]/g, '').trim();
+    if (!/^1[3-9]\d{9}$/.test(cleanPhone)) {
+      setPhoneInvalidHint(true);
+      setErrorMsg('请填写有效的11位手机号码');
+      document.getElementById('ownerPhone')?.focus();
+      return;
+    }
     if (!mainPlan) {
       setErrorMsg('请在第一部分第1题中选择您的意向倾向');
       document.getElementById('question1-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -145,6 +165,8 @@ export function SurveyFillView({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           roomNumber: roomNumber.trim(),
+          ownerName: ownerName.trim(),
+          ownerPhone: cleanPhone,
           fillDate,
           mainPlan,
           q2Agreement: q2Agreement || undefined,
@@ -163,10 +185,13 @@ export function SurveyFillView({
         }),
       });
 
-      const data = await res.json();
-      if (!res.ok) {
-        setErrorMsg(data.message || '提交失败，请检查填写内容');
-        if (data.existing) {
+      const parsed = await readJsonSafe<
+        SurveySubmission & { message?: string; existing?: SurveySubmission }
+      >(res);
+      const data = parsed.data;
+      if (!parsed.ok || !data) {
+        setErrorMsg(data?.message || parsed.errorMessage || '提交失败，请检查填写内容');
+        if (data?.existing) {
           setDuplicateRecord(data.existing);
         }
         return;
@@ -202,6 +227,12 @@ export function SurveyFillView({
             <div className="flex items-center justify-between">
               <span className="text-on-surface-variant">实名备案房号</span>
               <span className="font-bold text-on-surface">{receipt.roomNumber}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-on-surface-variant">业主核验信息</span>
+              <span className="font-semibold text-on-surface">
+                {receipt.ownerName} · {receipt.ownerPhone}
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-on-surface-variant">核心倾向方案</span>
@@ -266,7 +297,7 @@ export function SurveyFillView({
         <div className="flex items-start gap-2.5 p-3 rounded-lg bg-surface-variant text-on-surface-variant">
           <Info className="w-5 h-5 text-primary shrink-0 mt-0.5" />
           <p className="text-[13px] leading-relaxed">
-            本问卷为业主意见征集，用于业委会研判物业后续处置方向。问卷匿名，一户一票，请根据您的真实想法填写。
+            本问卷为业主意见征集，用于业委会研判物业后续处置方向。严格执行一户一票，姓名与手机号仅用于业委会核验联系，对外展示自动脱敏保密。
           </p>
         </div>
 
@@ -310,6 +341,68 @@ export function SurveyFillView({
                 提示：房号「{duplicateRecord.roomNumber}」已完成投票备案（哈希 {duplicateRecord.receiptHash}），不可重复提交。
               </p>
             )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <label
+                htmlFor="ownerName"
+                className="text-[13px] font-medium text-on-surface flex items-center gap-1"
+              >
+                <span>业主姓名</span>
+                <span className="text-error font-bold">*</span>
+              </label>
+              <input
+                id="ownerName"
+                type="text"
+                value={ownerName}
+                onChange={(e) => {
+                  setOwnerName(e.target.value);
+                  if (errorMsg) setErrorMsg('');
+                }}
+                placeholder="请输入业主真实姓名"
+                className="w-full h-12 px-3 rounded-lg bg-surface-container-low text-on-surface text-[14px] placeholder:text-outline border border-transparent focus:border-primary focus:bg-surface-container-lowest focus:outline-none transition-colors"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label
+                htmlFor="ownerPhone"
+                className="text-[13px] font-medium text-on-surface flex items-center gap-1"
+              >
+                <span>手机号</span>
+                <span className="text-error font-bold">*</span>
+              </label>
+              <input
+                id="ownerPhone"
+                type="tel"
+                inputMode="numeric"
+                maxLength={11}
+                value={ownerPhone}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/[^\d]/g, '');
+                  setOwnerPhone(val);
+                  if (phoneInvalidHint && /^1[3-9]\d{9}$/.test(val)) {
+                    setPhoneInvalidHint(false);
+                  }
+                  if (errorMsg) setErrorMsg('');
+                }}
+                onBlur={() => {
+                  if (ownerPhone && !/^1[3-9]\d{9}$/.test(ownerPhone)) {
+                    setPhoneInvalidHint(true);
+                  } else {
+                    setPhoneInvalidHint(false);
+                  }
+                }}
+                placeholder="请输入11位手机号码"
+                className="w-full h-12 px-3 rounded-lg bg-surface-container-low text-on-surface text-[14px] placeholder:text-outline border border-transparent focus:border-primary focus:bg-surface-container-lowest focus:outline-none transition-colors tabular-nums"
+              />
+              {phoneInvalidHint && (
+                <p className="text-[12px] text-error font-medium pt-0.5">
+                  请输入有效的11位中国大陆手机号码。
+                </p>
+              )}
+            </div>
           </div>
 
           <div className="space-y-1">

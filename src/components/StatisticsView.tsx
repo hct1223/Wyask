@@ -26,7 +26,9 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import communityHeroImg from '../assets/images/community_hero_1794580588365.jpg';
 import type { FilterGroup, SurveyStats } from '../types/survey';
+import { exportFilteredDetailsCsv, exportStatsSummaryCsv } from '../utils/csvExport';
 import { formatClockTime } from '../utils/format';
+import { readJsonSafe } from '../utils/http';
 import { exportStatsPdf } from '../utils/pdfExport';
 
 interface StatisticsViewProps {
@@ -42,21 +44,28 @@ export function StatisticsView({
 }: StatisticsViewProps) {
   const [filterGroup, setFilterGroup] = useState<FilterGroup>('all');
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
+  const [csvDrawerOpen, setCsvDrawerOpen] = useState(false);
   const [stats, setStats] = useState<SurveyStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState('');
   const [feedbackIdx, setFeedbackIdx] = useState(0);
   const [exportState, setExportState] = useState<'idle' | 'generating' | 'done'>('idle');
+  const [csvExportState, setCsvExportState] = useState<'idle' | 'exporting' | 'done'>('idle');
   const [heroError, setHeroError] = useState(false);
 
   const fetchStats = useCallback(async () => {
+    setFetchError('');
     try {
       const res = await fetch(`/api/stats?arrears=${filterGroup}`);
-      if (!res.ok) throw new Error('stats failed');
-      const data: SurveyStats = await res.json();
-      setStats(data);
+      const parsed = await readJsonSafe<SurveyStats & { message?: string }>(res);
+      if (!parsed.ok || !parsed.data) {
+        throw new Error(parsed.data?.message || parsed.errorMessage || '统计数据加载失败');
+      }
+      setStats(parsed.data);
       setFeedbackIdx(0);
     } catch (err) {
       console.error(err);
+      setFetchError(err instanceof Error ? err.message : '统计数据加载失败，请刷新重试');
     } finally {
       setLoading(false);
     }
@@ -79,16 +88,35 @@ export function StatisticsView({
     }
   };
 
-  const handleExportCsv = () => {
-    const a = document.createElement('a');
-    a.href = '/api/export/csv';
-    a.download = '利安花园业主表决问卷明细导出.csv';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+  const handleExportSummaryCsv = () => {
+    if (!stats || csvExportState === 'exporting') return;
+    setCsvExportState('exporting');
+    try {
+      exportStatsSummaryCsv(stats);
+      setCsvExportState('done');
+      setCsvDrawerOpen(false);
+      setTimeout(() => setCsvExportState('idle'), 2500);
+    } catch (err) {
+      console.error(err);
+      setCsvExportState('idle');
+    }
   };
 
-  if (loading || !stats) {
+  const handleExportDetailsCsv = async () => {
+    if (csvExportState === 'exporting') return;
+    setCsvExportState('exporting');
+    try {
+      await exportFilteredDetailsCsv(filterGroup);
+      setCsvExportState('done');
+      setCsvDrawerOpen(false);
+      setTimeout(() => setCsvExportState('idle'), 2500);
+    } catch (err) {
+      console.error(err);
+      setCsvExportState('idle');
+    }
+  };
+
+  if (loading) {
     return (
       <div className="w-full max-w-5xl mx-auto px-4 pb-8 space-y-4">
         <div className="h-36 rounded-xl bg-surface-container animate-pulse" />
@@ -98,6 +126,28 @@ export function StatisticsView({
           ))}
         </div>
         <div className="h-64 rounded-xl bg-surface-container-lowest animate-pulse" />
+      </div>
+    );
+  }
+
+  if (!stats) {
+    return (
+      <div className="w-full max-w-5xl mx-auto px-4 pb-8">
+        <div className="rounded-xl bg-surface-container-lowest p-8 text-center space-y-3 shadow-sm">
+          <p className="text-[15px] font-semibold text-on-surface">
+            {fetchError || '统计数据加载失败'}
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              setLoading(true);
+              fetchStats();
+            }}
+            className="h-10 px-4 rounded-lg bg-primary text-on-primary text-[13px] font-semibold cursor-pointer"
+          >
+            重新加载统计数据
+          </button>
+        </div>
       </div>
     );
   }
@@ -197,17 +247,38 @@ export function StatisticsView({
 
               <button
                 type="button"
-                onClick={handleExportCsv}
-                title="导出原始问卷明细CSV表格"
-                className="h-8 px-2.5 rounded-lg bg-surface-container text-on-surface-variant text-[12px] font-medium flex items-center gap-1 hover:bg-surface-container-high active:scale-95 transition-all cursor-pointer whitespace-nowrap"
+                onClick={() => {
+                  setCsvDrawerOpen((v) => !v);
+                  setFilterDrawerOpen(false);
+                }}
+                disabled={csvExportState === 'exporting'}
+                title="导出当前统计结果或逐户答卷明细为 CSV 文件"
+                className="h-8 px-2.5 rounded-lg bg-surface-container text-on-surface-variant text-[12px] font-semibold flex items-center gap-1 hover:bg-surface-container-high active:scale-95 transition-all cursor-pointer whitespace-nowrap disabled:opacity-60"
               >
-                <FileSpreadsheet className="w-3.5 h-3.5 text-secondary" />
-                <span>导出表格</span>
+                {csvExportState === 'exporting' ? (
+                  <>
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin text-secondary" />
+                    <span>导出中</span>
+                  </>
+                ) : csvExportState === 'done' ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-secondary" />
+                    <span className="text-secondary">已导出CSV</span>
+                  </>
+                ) : (
+                  <>
+                    <FileSpreadsheet className="w-3.5 h-3.5 text-secondary" />
+                    <span>导出CSV</span>
+                  </>
+                )}
               </button>
 
               <button
                 type="button"
-                onClick={() => setFilterDrawerOpen((v) => !v)}
+                onClick={() => {
+                  setFilterDrawerOpen((v) => !v);
+                  setCsvDrawerOpen(false);
+                }}
                 className="h-8 px-2.5 rounded-lg bg-surface-container-high text-on-surface text-[12px] font-semibold flex items-center gap-1 active:scale-95 transition-all cursor-pointer whitespace-nowrap"
               >
                 <SlidersHorizontal className="w-3.5 h-3.5" />
@@ -215,6 +286,35 @@ export function StatisticsView({
               </button>
             </div>
           </div>
+
+          {csvDrawerOpen && (
+            <div className="pt-1 grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={handleExportSummaryCsv}
+                className="py-2 px-3 rounded-lg bg-surface-container-low hover:bg-surface-container text-left transition-colors cursor-pointer"
+              >
+                <span className="block text-[12px] font-semibold text-primary">
+                  统计结果汇总表 (.csv)
+                </span>
+                <span className="block text-[11px] text-on-surface-variant">
+                  含Q01-Q12各项票数、占比与交叉分析
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={handleExportDetailsCsv}
+                className="py-2 px-3 rounded-lg bg-surface-container-low hover:bg-surface-container text-left transition-colors cursor-pointer"
+              >
+                <span className="block text-[12px] font-semibold text-secondary">
+                  逐户答卷明细表 (.csv)
+                </span>
+                <span className="block text-[11px] text-on-surface-variant">
+                  按当前口径导出全部实名核验答卷行
+                </span>
+              </button>
+            </div>
+          )}
 
           {filterDrawerOpen && (
             <div className="pt-1 grid grid-cols-3 gap-1.5">
@@ -994,8 +1094,8 @@ export function StatisticsView({
         </div>
       </section>
 
-      {/* Bottom quick PDF export bar */}
-      <div className="flex justify-center pt-1">
+      {/* Bottom quick export bar */}
+      <div className="flex flex-wrap items-center justify-center gap-2.5 pt-1">
         <button
           type="button"
           onClick={handleExportPdf}
@@ -1006,8 +1106,18 @@ export function StatisticsView({
           <span>
             {exportState === 'generating'
               ? '正在生成可视化统计报告...'
-              : '下载完整可视化统计 PDF 报告（含全部图表与结论）'}
+              : '下载完整可视化统计 PDF 报告'}
           </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={handleExportSummaryCsv}
+          disabled={csvExportState === 'exporting'}
+          className="h-11 px-5 rounded-xl bg-surface-container text-secondary text-[13px] font-semibold flex items-center gap-2 hover:bg-surface-container-high transition-colors cursor-pointer disabled:opacity-60"
+        >
+          <FileSpreadsheet className="w-4 h-4" />
+          <span>导出当前统计结果 CSV</span>
         </button>
       </div>
     </div>
